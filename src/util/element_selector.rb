@@ -16,7 +16,7 @@ module Flint
 			@path_flow = Array.new()
 		end
 
-		def get_ele_info(element_name)
+		def get_element_info(element_name)
 			_element_info = @elements_info[element_name]
 			_root_element = _element_info[0]
 			_selection_method = _element_info[1]
@@ -25,7 +25,7 @@ module Flint
 			return _root_element, _selection_method, _selection_arg, _element_type
 		end
 
-		def element_selector(driver)
+		def self.element_selector(driver)
 			if @path_flow.size == 1
 				return driver
 			else
@@ -54,19 +54,19 @@ module Flint
 				return self.element_selector(driver)
 			end
 
-		def path_builder(root_element)
+		def self.path_builder(root_element)
 			@path_flow << root_element
 			if @path_flow[-1] == "window"
 				return nil
 			else
-				root_element = self.get_ele_info(root_element)[0]
+				root_element = self.get_element_info(root_element)[0]
 				return self.path_builder(root_element)
 			end
 
 		def get_element()
 			self.path_builder(@element_name)
 			_element = self.element_selector(@window)
-			_element_type = self.get_ele_info(@element_name)[3]
+			_element_type = self.get_element_info(@element_name)[3]
 			if _element_type != "" and OBJECT_MAP.has_key?(_element_type)
 				return OBJECT_MAP[_element_type](_element)
 			else
